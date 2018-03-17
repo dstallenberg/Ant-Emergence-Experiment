@@ -1,4 +1,4 @@
 package com.dimitri.antemergence.world.nest.chambers;
 
-public class FoodChamber {
+public class FoodChamber extends BasicChamber{
 }

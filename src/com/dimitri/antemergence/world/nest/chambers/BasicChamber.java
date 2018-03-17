@@ -1,4 +1,14 @@
 package com.dimitri.antemergence.world.nest.chambers;
 
-public class BasicChamber {
+import com.dimitri.antemergence.world.Location;
+import com.dimitri.antemergence.world.nest.Tunnel;
+
+import java.util.ArrayList;
+
+public class BasicChamber extends Location {
+
+    private ArrayList<Tunnel> linkedTunnels;
+
+
+
 }

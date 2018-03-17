@@ -1,4 +1,10 @@
 package com.dimitri.antemergence.world.nest;
 
-public class Entrances {
+import com.dimitri.antemergence.world.Location;
+import com.dimitri.antemergence.world.nest.chambers.BasicChamber;
+
+public class Entrances extends Location {
+
+    private BasicChamber linkedChamber;
+
 }

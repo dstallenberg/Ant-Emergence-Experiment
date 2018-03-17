@@ -9,4 +9,6 @@ public class Conditions {
         SPRING, SUMMER, AUTUMN, WINTER;
     }
 
+    private int day;
+
 }
