@@ -4,6 +4,6 @@ import com.dimitri.antemergence.world.Location;
 
 public class Vegetation {
 
-    Location location;
+    private Location location;
 
 }
