@@ -1,4 +1,4 @@
 package com.dimitri.antemergence.colony.jobs;
 
-public class Warrior {
+public class Soldier {
 }
