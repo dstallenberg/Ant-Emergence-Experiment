@@ -5,10 +5,10 @@ public class Climate {
     private double rain;
     private double sunShine;
     private enum season {
-        SPRING, SUMMER, AUTUMN, WINTER;
+        SPRING, SUMMER, AUTUMN, WINTER
     }
-    private boolean night;
-    private int day;
+    private int timeOfDay;
+    private int dayOfYear;
 
 
 }

@@ -1,4 +1,4 @@
 package com.dimitri.antemergence.world;
 
-public class Map {
+public class Seed {
 }

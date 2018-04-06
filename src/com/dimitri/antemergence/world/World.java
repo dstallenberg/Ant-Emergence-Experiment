@@ -11,7 +11,7 @@ public class World {
     private Nest nest;
 
     public World(){
-
+        environment = new Environment();
     }
 
     public void update(){
@@ -19,7 +19,7 @@ public class World {
     }
 
     public void render(Graphics g){
-
+        environment.render(g);
     }
 
 }

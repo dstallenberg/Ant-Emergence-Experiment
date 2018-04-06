@@ -65,6 +65,8 @@ public class Updater {
 
     public void quit(){
         running = false;
+        //SAVE STATE//
+
     }
 
 
