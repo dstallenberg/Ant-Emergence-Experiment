@@ -1,4 +1,8 @@
 package com.dimitri.antemergence.world.environment;
 
-public class Soil {
+import java.awt.*;
+
+public enum Soil {
+    EARTH, SAND, MUD, WATER, GRASS
+
 }

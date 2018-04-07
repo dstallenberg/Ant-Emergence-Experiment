@@ -10,6 +10,9 @@ public class Location {
     private int x;
     private int y;
     private int z;
+
+    private int DimensionSize;
+
     private Conditions conditions;
     private List<Location> neighbours;
     private boolean available;
@@ -19,6 +22,8 @@ public class Location {
         this.x = x;
         this.y = y;
         this.z = z;
+        // hardcoded
+        this.DimensionSize = 20;
         this.available = available;
         this.digAble = digAble;
         this.neighbours = new ArrayList<>();
@@ -33,5 +38,27 @@ public class Location {
     }
 
 
+    public boolean isAvailable() {
+        return available;
+    }
 
+    public boolean isDigAble() {
+        return digAble;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public int getDimensionSize() {
+        return DimensionSize;
+    }
 }
