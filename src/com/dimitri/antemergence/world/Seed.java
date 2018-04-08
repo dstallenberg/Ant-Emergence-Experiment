@@ -31,7 +31,7 @@ public class Seed {
 
     public void init(){
         random = new Random();
-        spotMap = new BasicSpot[width][height];
+        spotMap = new BasicSpot[height][width];
 
         for (int y = 0; y < spotMap.length; y++) {
             for (int x = 0; x < spotMap[y].length; x++) {
@@ -40,21 +40,20 @@ public class Seed {
         }
 
         setWater();
-        setSand();
         setFertile();
         setNeighbours();
     }
 
     public void setWater() {
-        int temp = random.nextInt(width/5) + 1;
+        int temp = random.nextInt(width/4) + 1;
         for (int i = 0; i < temp; i++) {
             int x = random.nextInt(spotMap[0].length);
             int y = random.nextInt(spotMap.length);
 
             spotMap[y][x] = new WaterSpot(x, y);
             // make some of the surrounding spots water too
-            int maxRangeX = (int) (width/5 * (random.nextDouble()/2+0.5));
-            int maxRangeY = (int) (width/5 * (random.nextDouble()/2+0.5));
+            int maxRangeX = (int) (width/10 * (random.nextDouble()/2+0.5));
+            int maxRangeY = (int) (width/10 * (random.nextDouble()/2+0.5));
             int startB = y - maxRangeY >= 0 ? y - maxRangeY : 0;
             int endB = y + maxRangeY < spotMap.length ? y + maxRangeY : spotMap.length;
             int startA = x - maxRangeX >= 0 ? x - maxRangeX : 0;
@@ -81,7 +80,7 @@ public class Seed {
                     // close to water means more chance to be fertile
                     // overall chance is 0.1
 
-                    int maxRange = width/20;
+                    int maxRange = width/5;
                     int startB = y - maxRange >= 0 ? y - maxRange : 0;
                     int endB = y + maxRange < spotMap.length ? y + maxRange : spotMap.length;
                     int startA = x - maxRange >= 0 ? x - maxRange : 0;
@@ -102,42 +101,11 @@ public class Seed {
                     }
 
                     double r = smallestDistance/maxDistance;
-                    if(random.nextDouble() <= 0.15 || r*random.nextDouble() <= 0.3){
+                    if(random.nextDouble() <= 0.1 || r*random.nextDouble() <= 0.1){
                         spotMap[y][x] = new FertileSpot(x, y);
                     }
-                }
-            }
-        }
-    }
-
-    public void setSand() {
-        for (int y = 0; y < spotMap.length; y++) {
-            for (int x = 0; x < spotMap[0].length; x++) {
-                if(spotMap[y][x] instanceof DirtSpot){
-
-                    int maxRange = width/4;
-                    int startB = y - maxRange >= 0 ? y - maxRange : 0;
-                    int endB = y + maxRange < spotMap.length ? y + maxRange : spotMap.length;
-                    int startA = x - maxRange >= 0 ? x - maxRange : 0;
-                    int endA = x + maxRange < spotMap[0].length ? x + maxRange : spotMap[0].length;
-                    double maxDistance = Math.sqrt(maxRange*maxRange + maxRange*maxRange);
-
-                    double smallestDistance = Double.MAX_VALUE;
-                    //find smallestDistance to water
-                    for (int b = startB; b < endB; b++) {
-                        for (int a = startA; a < endA; a++) {
-                            if(spotMap[b][a] instanceof WaterSpot){
-                                double distance = Math.sqrt((x-a)*(x-a) + (y-b)*(y-b));
-                                if(distance < smallestDistance){
-                                    smallestDistance = distance;
-                                }
-                            }
-                        }
-                    }
-
-
-                    double r = smallestDistance/maxDistance;
-                    if((random.nextDouble()/2 + 0.5) * r * r > 0.2){
+                    double z = r*random.nextDouble();
+                    if(((z >= 0.6) && random.nextDouble() <= 0.2 ) && !(spotMap[y][x] instanceof FertileSpot)){
                         spotMap[y][x] = new SandSpot(x, y);
                     }
                 }

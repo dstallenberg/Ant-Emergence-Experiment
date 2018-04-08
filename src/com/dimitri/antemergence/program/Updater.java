@@ -13,11 +13,9 @@ public class Updater {
 
     private Rendering rendering;
 
-    private World world;
 
     public Updater(){
         rendering = new Rendering();
-        world = new World();
         init();
         update.start();
         render.start();
@@ -27,40 +25,38 @@ public class Updater {
         running = true;
         update = new Thread(() -> {
             long last = System.nanoTime();
+            double rate = 1000000000/UPS;
             while(running){
-                if(System.nanoTime() - last >= 1000000000/UPS){
-                    update();
-                }else{
+                if(System.nanoTime() - last >= rate){
+                    double delta = ((System.nanoTime() - last)- rate)/rate;
+                    last = System.nanoTime();
+                    Main.update();
+                }else if(System.nanoTime() - last < rate/2){
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(0, 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+
             }
         });
         render = new Thread(() -> {
             long last = System.nanoTime();
+            double rate = 1000000000/FPS;
             while(running){
-                if(System.nanoTime() - last >= 1000000000/FPS){
-                    render();
-                }else{
+                if(System.nanoTime() - last >= rate){
+                    last = System.nanoTime();
+                    rendering.render();
+                }else if(System.nanoTime() - last < rate/2){
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(0, 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-    }
-
-    public void update(){
-        world.update();
-    }
-
-    public void render(){
-        rendering.render(world);
     }
 
     public void quit(){

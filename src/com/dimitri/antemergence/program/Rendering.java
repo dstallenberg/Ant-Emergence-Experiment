@@ -1,5 +1,6 @@
 package com.dimitri.antemergence.program;
 
+import com.dimitri.antemergence.program.handlers.KeyHandler;
 import com.dimitri.antemergence.world.World;
 
 import java.awt.*;
@@ -33,6 +34,7 @@ public class Rendering {
 
         canvas.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
         //put listeners in canvas
+        canvas.addKeyListener(new KeyHandler());
 
         frame.add(canvas);
         frame.pack();
@@ -59,7 +61,7 @@ public class Rendering {
         canvasHeight = scale*GAME_HEIGHT;
     }
 
-    public void render(World world) {
+    public void render() {
         if(volatileImage.validate(gc) == VolatileImage.IMAGE_INCOMPATIBLE){
             volatileImage = gc.createCompatibleVolatileImage(GAME_WIDTH, GAME_HEIGHT);
         }
@@ -72,7 +74,7 @@ public class Rendering {
         g.setColor(Color.WHITE);
 
 
-        world.render(g);
+        Main.render(g);
 
 
         g = canvas.getGraphics();
