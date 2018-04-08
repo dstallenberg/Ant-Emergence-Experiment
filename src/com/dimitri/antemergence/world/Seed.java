@@ -3,6 +3,7 @@ package com.dimitri.antemergence.world;
 import com.dimitri.antemergence.world.environment.spots.BasicSpot;
 import com.dimitri.antemergence.world.environment.spots.available.DirtSpot;
 import com.dimitri.antemergence.world.environment.spots.available.FertileSpot;
+import com.dimitri.antemergence.world.environment.spots.available.SandSpot;
 import com.dimitri.antemergence.world.environment.spots.unavailable.WaterSpot;
 
 import java.util.Random;
@@ -13,17 +14,22 @@ public class Seed {
     private String seed = "1245678";
     private Random random;
     private BasicSpot[][] spotMap;
+    private int width, height;
 
     public Seed(int width, int height, String seed){
         this.seed = seed;
-        init(width, height);
+        this.width = width;
+        this.height = height;
+        init();
     }
 
     public Seed(int width, int height){
-        init(width, height);
+        this.width = width;
+        this.height = height;
+        init();
     }
 
-    public void init(int width, int height){
+    public void init(){
         random = new Random();
         spotMap = new BasicSpot[width][height];
 
@@ -34,35 +40,110 @@ public class Seed {
         }
 
         setWater();
+        setSand();
         setFertile();
         setNeighbours();
     }
 
     public void setWater() {
-        int temp = random.nextInt(5) + 1;
+        int temp = random.nextInt(width/5) + 1;
         for (int i = 0; i < temp; i++) {
             int x = random.nextInt(spotMap[0].length);
             int y = random.nextInt(spotMap.length);
 
             spotMap[y][x] = new WaterSpot(x, y);
-
             // make some of the surrounding spots water too
+            int maxRangeX = (int) (width/5 * (random.nextDouble()/2+0.5));
+            int maxRangeY = (int) (width/5 * (random.nextDouble()/2+0.5));
+            int startB = y - maxRangeY >= 0 ? y - maxRangeY : 0;
+            int endB = y + maxRangeY < spotMap.length ? y + maxRangeY : spotMap.length;
+            int startA = x - maxRangeX >= 0 ? x - maxRangeX : 0;
+            int endA = x + maxRangeX < spotMap[0].length ? x + maxRangeX : spotMap[0].length;
 
-        }
+            double maxDistance = Math.sqrt(maxRangeX*maxRangeX + maxRangeY*maxRangeY);
 
-
-    }
-
-    public void setFertile() {
-        for (int y = 0; y < spotMap.length; y++) {
-            for (int x = 0; x < spotMap[y].length; x++) {
-                if(spotMap[x][y] instanceof DirtSpot){
-//                    if(closetowater) make fertile
+            for (int b = startB; b < endB; b++) {
+                for (int a = startA; a < endA; a++) {
+                    double distance = Math.sqrt((x-a)*(x-a) + (y-b)*(y-b));
+                    double r = 1-(distance/maxDistance);
+                    if((random.nextDouble()/2+0.5) * r * r >= 0.2){//
+                        spotMap[b][a] = new WaterSpot(a, b);
+                    }
                 }
             }
         }
     }
 
+    public void setFertile() {
+        for (int y = 0; y < spotMap.length; y++) {
+            for (int x = 0; x < spotMap[y].length; x++) {
+                if(spotMap[y][x] instanceof DirtSpot){
+                    // close to water means more chance to be fertile
+                    // overall chance is 0.1
+
+                    int maxRange = width/20;
+                    int startB = y - maxRange >= 0 ? y - maxRange : 0;
+                    int endB = y + maxRange < spotMap.length ? y + maxRange : spotMap.length;
+                    int startA = x - maxRange >= 0 ? x - maxRange : 0;
+                    int endA = x + maxRange < spotMap[0].length ? x + maxRange : spotMap[0].length;
+                    double maxDistance = Math.sqrt(maxRange*maxRange + maxRange*maxRange);
+
+                    double smallestDistance = Double.MAX_VALUE;
+                    //find smallestDistance to water
+                    for (int b = startB; b < endB; b++) {
+                        for (int a = startA; a < endA; a++) {
+                            if(spotMap[b][a] instanceof WaterSpot){
+                                double distance = Math.sqrt((x-a)*(x-a) + (y-b)*(y-b));
+                                if(distance < smallestDistance){
+                                    smallestDistance = distance;
+                                }
+                            }
+                        }
+                    }
+
+                    double r = smallestDistance/maxDistance;
+                    if(random.nextDouble() <= 0.15 || r*random.nextDouble() <= 0.3){
+                        spotMap[y][x] = new FertileSpot(x, y);
+                    }
+                }
+            }
+        }
+    }
+
+    public void setSand() {
+        for (int y = 0; y < spotMap.length; y++) {
+            for (int x = 0; x < spotMap[0].length; x++) {
+                if(spotMap[y][x] instanceof DirtSpot){
+
+                    int maxRange = width/4;
+                    int startB = y - maxRange >= 0 ? y - maxRange : 0;
+                    int endB = y + maxRange < spotMap.length ? y + maxRange : spotMap.length;
+                    int startA = x - maxRange >= 0 ? x - maxRange : 0;
+                    int endA = x + maxRange < spotMap[0].length ? x + maxRange : spotMap[0].length;
+                    double maxDistance = Math.sqrt(maxRange*maxRange + maxRange*maxRange);
+
+                    double smallestDistance = Double.MAX_VALUE;
+                    //find smallestDistance to water
+                    for (int b = startB; b < endB; b++) {
+                        for (int a = startA; a < endA; a++) {
+                            if(spotMap[b][a] instanceof WaterSpot){
+                                double distance = Math.sqrt((x-a)*(x-a) + (y-b)*(y-b));
+                                if(distance < smallestDistance){
+                                    smallestDistance = distance;
+                                }
+                            }
+                        }
+                    }
+
+
+                    double r = smallestDistance/maxDistance;
+                    if((random.nextDouble()/2 + 0.5) * r * r > 0.2){
+                        spotMap[y][x] = new SandSpot(x, y);
+                    }
+                }
+            }
+        }
+    }
 
     public void setNeighbours() {
         // set neighbours probably not the fastest way

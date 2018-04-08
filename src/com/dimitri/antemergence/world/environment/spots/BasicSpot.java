@@ -24,9 +24,12 @@ public abstract class BasicSpot extends Location {
         }else if(soil.equals(Soil.GRASS)){
             g.setColor(new Color(28, 169, 62));
             g.fillRect(getX()*getDimensionSize(), getY()*getDimensionSize(), getDimensionSize(), getDimensionSize());
+        }else if(soil.equals(Soil.SAND)){
+            g.setColor(new Color(255, 206, 162));
+            g.fillRect(getX()*getDimensionSize(), getY()*getDimensionSize(), getDimensionSize(), getDimensionSize());
         }
 
-        g.setColor(Color.WHITE);
-        g.drawRect(getX()*getDimensionSize(), getY()*getDimensionSize(), getDimensionSize(), getDimensionSize());
+//        g.setColor(Color.WHITE);
+//        g.drawRect(getX()*getDimensionSize(), getY()*getDimensionSize(), getDimensionSize(), getDimensionSize());
     }
 }

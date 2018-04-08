@@ -23,7 +23,7 @@ public class Location {
         this.y = y;
         this.z = z;
         // hardcoded
-        this.DimensionSize = 20;
+        this.DimensionSize = 4;
         this.available = available;
         this.digAble = digAble;
         this.neighbours = new ArrayList<>();

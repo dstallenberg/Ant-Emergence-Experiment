@@ -19,7 +19,7 @@ public class Environment {
     private BasicSpot[][] spotMap;
 
     public Environment(){
-        this.seed = new Seed(20, 20);
+        this.seed = new Seed(200, 300);
         this.climate = new Climate();
         spotMap = seed.getSpotMap();
 
